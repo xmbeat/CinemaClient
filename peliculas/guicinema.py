@@ -5,7 +5,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 from gobject.constants import TYPE_STRING
-from buscador_actores import BuscadorActores, CargadorActor
+from buscador_actores import BuscadorActores, CargadorActor, BuscadorPeliculas, CargadorPelicula
 
 class GUICinema:
     def __init__(self, gladeFile):
@@ -35,11 +35,6 @@ class GUICinema:
         self.btnActualizarPelicula = builder.get_object("btnActualizarPelicula")
         self.btnActualizarPelicula.connect("clicked", self.onPressedActualizarPelicula)
         self.cmbResultadosPelicula = builder.get_object("cmbResultadosPelicula")
-    
-        self.txtTitulo = builder.get_object("txtTitulo")
-        self.txtDuracion = builder.get_object("txtDuracion")
-        self.txtUrlPelicula = builder.get_object("txtUrlPelicula")
-        self.txtImagenPelicula = builder.get_object("txtImagenPelicula")
         
         store = gtk.ListStore(TYPE_STRING)
         self.cmbResultadosActor.set_model(store)
@@ -65,9 +60,44 @@ class GUICinema:
         self.imgActor = gtk.Image()
         self.scrolledActor = builder.get_object("scrolledActor")
         self.scrolledActor.add_with_viewport(self.imgActor)
+        
+        self.txtBusquedaPelicula = builder.get_object("txtBusquedaPelicula")
+        self.txtTitulo = builder.get_object("txtTitulo")
+        self.spbDuracion = builder.get_object("spbDuracion")
+        self.txtUrlPelicula = builder.get_object("txtUrlPelicula")
+        self.txtImagenPelicula = builder.get_object("txtImagenPelicula")
+        self.frmDetallesPelicula = builder.get_object("frmDetallesPelicula")
         self.imgPelicula = gtk.Image()
         self.scrolledPelicula = builder.get_object("scrolledPelicula")
         self.scrolledPelicula.add_with_viewport(self.imgPelicula)
+        
+        self.scrolledCompanias = builder.get_object("scrolledCompanias")
+        self.lstCompanias = gtk.TreeView()
+        store = gtk.ListStore(str)        
+        self.lstCompanias.set_model(store)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn("Companias", cell, text=0)
+        self.lstCompanias.append_column(col)
+        self.scrolledCompanias.add_with_viewport(self.lstCompanias)
+        
+        self.scrolledGeneros = builder.get_object("scrolledGeneros")
+        self.lstGeneros = gtk.TreeView()
+        store = gtk.ListStore(str)        
+        self.lstGeneros.set_model(store)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn("Generos", cell, text=0)
+        self.lstGeneros.append_column(col)
+        self.scrolledGeneros.add_with_viewport(self.lstGeneros)
+        
+        self.scrolledReparto = builder.get_object("scrolledReparto")
+        self.lstReparto = gtk.TreeView()
+        store = gtk.ListStore(str)        
+        self.lstReparto.set_model(store)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn("Reparto", cell, text=0)
+        self.lstReparto.append_column(col)
+        self.scrolledReparto.add_with_viewport(self.lstReparto)
+        
         
         self.statusbar = builder.get_object("statusbar")
         self.window.show_all()
@@ -76,8 +106,11 @@ class GUICinema:
         self.actoresReducidos = None
         self.listaActores = None
         
-        self.window.connect("destroy", gtk.mainquit)
+        self.window.connect("destroy", gtk.main_quit)
         gtk.main()
+    
+    def addElement(self, component, data):
+        component.get_model().append([data])
     
     def onPressedActualizarPelicula(self, button):
         pass
@@ -87,7 +120,7 @@ class GUICinema:
             if len(self.actoresReducidos) > 0:
                 if self.cmbResultadosActor.get_active() == -1:
                     print "Seleccione uno"
-                self.btnActualizarActor.set_label("Actualizar")
+                    return
                 self.btnSeleccionarActor.set_sensitive(False)
                 self.btnBuscarActor.set_sensitive(False)
                 self.frmDetallesActor.set_sensitive(False)
@@ -98,7 +131,16 @@ class GUICinema:
                 cargador.start()
     
     def onPressedSeleccionarPelicula(self, button):
-        pass    
+        if not self.peliculasReducidas is None:
+            if len(self.peliculasReducidas) > 0:
+                self.btnSeleccionarPelicula.set_sensitive(False)
+                self.btnBuscarPelicula.set_sensitive(False)
+                self.frmDetallesPelicula.set_sensitive(False)
+                self.listaPeliculas = None
+                
+                indice = self.cmbResultadosPelicula.get_active()
+                cargador = CargadorPelicula(self.peliculasReducidas[indice], self)
+                cargador.start()
         
     def onPressedBuscarActor(self, button):
         button.set_sensitive(False)
@@ -112,7 +154,15 @@ class GUICinema:
         buscador.start()
         
     def onPressedBuscarPelicula(self, button):
-        pass
+        button.set_sensitive(False)
+        self.removeAllItems(self.cmbResultadosPelicula)
+        self.frmDetallesPelicula.set_sensitive(False)
+        self.imgPelicula.clear()
+        nombre = self.txtBusquedaPelicula.get_text()
+        self.currentPelicula = None
+        self.peliculasReducidas = None
+        buscador = BuscadorPeliculas(nombre, self)
+        buscador.start()
     
     def onPressedFechaEstreno(self, button):
         pass
@@ -130,6 +180,27 @@ class GUICinema:
         model = cmb.get_model()
         model.clear()
     
+    def loadCurrentPelicula(self):
+        if self.currentPelicula is None:
+            return
+        self.txtTitulo.set_text(self.currentPelicula.titulo)
+        self.spbDuracion.set_value(int(self.currentPelicula.duracion))
+        self.btnFechaEstreno.set_label(self.currentPelicula.fechaEstreno)
+        self.txtUrlPelicula.set_text(self.currentPelicula.urlPelicula)
+        self.txtImagenPelicula.set_text(self.currentPelicula.urlImagen)
+        
+        self.lstCompanias.get_model().clear()
+        for compania in self.currentPelicula.companias:
+            self.lstCompanias.get_model().append([compania.nombre])
+        
+        self.lstGeneros.get_model().clear()
+        for genero in self.currentPelicula.generos:
+            self.lstGeneros.get_model().append([genero.nombre])
+            
+        self.lstReparto.get_model().clear()
+        for reparto in self.currentPelicula.reparto:
+            self.lstReparto.get_model().append([reparto.papel])
+        
     def loadCurrentActor(self):
         if self.currentActor is None:
             return
@@ -148,27 +219,36 @@ class GUICinema:
         self.txtImagenActor.set_text(self.currentActor.urlImagen)   
     
     def loadUrlImage(self, component, url, maxWidth):
+        released = True
         try:
             gtk.gdk.threads_enter()
-            self.imgActor.set_from_pixbuf(None)
+            released = False
+            component.set_from_pixbuf(None)
+            idMessage = self.pushMessage("Cargando Imagen...")
             gtk.gdk.threads_leave()
+            released = True
             response = urllib2.urlopen(url)
             loader = gtk.gdk.PixbufLoader()
             loader.write(response.read())
             loader.close()
             gtk.gdk.threads_enter()
-            self.imgActor.set_from_pixbuf(loader.get_pixbuf())
+            released = False
+            self.popMessage(idMessage)
+            component.set_from_pixbuf(loader.get_pixbuf())
             gtk.gdk.threads_leave()
+            released = True
         except Exception as error:
             print "guicinema::loadUrlImage::" + str(error)
-    
+        finally:
+            if not released:
+                gtk.gdk.threads_leave()
     def pushMessage(self, message):
         context = self.statusbar.get_context_id("statusbar")
         return self.statusbar.push(context, message)
     
     def popMessage(self, idMessage):
         context = self.statusbar.get_context_id("statusbar")
-        self.statusbar.remove(context, idMessage)
+        self.statusbar.remove_message(context, idMessage)
     
 # If the program is run directly or passed as an argument to the python
 # interpreter then create a HelloWorld instance and show it

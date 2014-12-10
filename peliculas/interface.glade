@@ -458,7 +458,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFrame" id="frmDetallesActor1">
+                  <object class="GtkFrame" id="frmDetallesPelicula">
                     <property name="visible">True</property>
                     <property name="label_xalign">0</property>
                     <child>
@@ -502,20 +502,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="right_attach">2</property>
-                                                    <property name="y_options">GTK_FILL</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkEntry" id="txtDuracion">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="invisible_char">•</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="right_attach">2</property>
-                                                    <property name="top_attach">1</property>
-                                                    <property name="bottom_attach">2</property>
                                                     <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
@@ -625,6 +611,21 @@
                                                     <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
+                                                <child>
+                                                  <object class="GtkSpinButton" id="spbDuracion">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="invisible_char">•</property>
+                                                    <property name="adjustment">adjustment1</property>
+                                                    <property name="numeric">True</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="padding">10</property>
@@ -657,7 +658,18 @@
                                             <property name="visible">True</property>
                                             <property name="spacing">5</property>
                                             <child>
-                                              <placeholder/>
+                                              <object class="GtkScrolledWindow" id="scrolledCompanias">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="hscrollbar_policy">automatic</property>
+                                                <property name="vscrollbar_policy">automatic</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
                                             </child>
                                             <child>
                                               <object class="GtkVButtonBox" id="vbuttonbox1">
@@ -726,7 +738,18 @@
                                             <property name="visible">True</property>
                                             <property name="spacing">5</property>
                                             <child>
-                                              <placeholder/>
+                                              <object class="GtkScrolledWindow" id="scrolledGeneros">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="hscrollbar_policy">automatic</property>
+                                                <property name="vscrollbar_policy">automatic</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
                                             </child>
                                             <child>
                                               <object class="GtkVButtonBox" id="vbuttonbox2">
@@ -795,7 +818,18 @@
                                             <property name="visible">True</property>
                                             <property name="spacing">5</property>
                                             <child>
-                                              <placeholder/>
+                                              <object class="GtkScrolledWindow" id="scrolledReparto">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="hscrollbar_policy">automatic</property>
+                                                <property name="vscrollbar_policy">automatic</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
                                             </child>
                                             <child>
                                               <object class="GtkVButtonBox" id="vbuttonbox3">
@@ -968,5 +1002,11 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="page_size">10</property>
   </object>
 </interface>

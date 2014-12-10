@@ -133,7 +133,4 @@ class MovieClient:
         except Exception as error:
             print "MovieClient::buscarPelicula::" + str(error)
         return results
-    
-if __name__ == "__main__":
-    cliente = MovieClient()
-    cliente.buscarActor("Eminem", 1)
+

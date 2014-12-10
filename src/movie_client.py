@@ -24,7 +24,7 @@ class MovieClient:
 
     def updateActor(self, actor):
         pass
-    
+
     def updatePelicula(self, pelicula):
         pass
 

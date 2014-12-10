@@ -1,3 +1,4 @@
+
 Feature: Obtener datos generales de un actor o pelicula
 	Como usuario
 	quiero obtener los actores o peliculas que coincidan con patrones de busqueda
@@ -13,3 +14,5 @@ Feature: Obtener datos generales de un actor o pelicula
 		Given: que se tiene "Jurassic Park III"
 		When: se realiza la busqueda de pelicula
 		then: obtengo una lista igual a "1" elementos
+		
+	

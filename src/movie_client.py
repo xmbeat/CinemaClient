@@ -22,6 +22,12 @@ class MovieClient:
         self.host = "api.themoviedb.org"
         self.imagePath = "http://cf2.imgobject.com/t/p/w500"
 
+    def updateActor(self, actor):
+        pass
+    
+    def updatePelicula(self, pelicula):
+        pass
+
     def getJSON(self, host, resource):
         conn = httplib.HTTPConnection(host, 80)
         conn.request("GET", resource)

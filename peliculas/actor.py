@@ -42,5 +42,5 @@ class InfoGenero:
 
 class InfoReparto:
     def __init__(self):
-        self.id = 0
+        self.idActor = 0
         self.papel = ""

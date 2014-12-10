@@ -2,6 +2,7 @@
 
 import urllib2
 import pygtk
+from peliculas.movie_client import MovieClient
 pygtk.require('2.0')
 import gtk
 from gobject.constants import TYPE_STRING
@@ -91,10 +92,13 @@ class GUICinema:
         
         self.scrolledReparto = builder.get_object("scrolledReparto")
         self.lstReparto = gtk.TreeView()
-        store = gtk.ListStore(str)        
+        store = gtk.ListStore(str, str)        
         self.lstReparto.set_model(store)
         cell = gtk.CellRendererText()
-        col = gtk.TreeViewColumn("Reparto", cell, text=0)
+        col = gtk.TreeViewColumn("Papel", cell, text=0)
+        self.lstReparto.append_column(col)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn("Actor", cell, text=1)
         self.lstReparto.append_column(col)
         self.scrolledReparto.add_with_viewport(self.lstReparto)
         
@@ -109,8 +113,6 @@ class GUICinema:
         self.window.connect("destroy", gtk.main_quit)
         gtk.main()
     
-    def addElement(self, component, data):
-        component.get_model().append([data])
     
     def onPressedActualizarPelicula(self, button):
         pass
@@ -183,24 +185,44 @@ class GUICinema:
     def loadCurrentPelicula(self):
         if self.currentPelicula is None:
             return
-        self.txtTitulo.set_text(self.currentPelicula.titulo)
-        self.spbDuracion.set_value(int(self.currentPelicula.duracion))
-        self.btnFechaEstreno.set_label(self.currentPelicula.fechaEstreno)
-        self.txtUrlPelicula.set_text(self.currentPelicula.urlPelicula)
-        self.txtImagenPelicula.set_text(self.currentPelicula.urlImagen)
-        
-        self.lstCompanias.get_model().clear()
-        for compania in self.currentPelicula.companias:
-            self.lstCompanias.get_model().append([compania.nombre])
-        
-        self.lstGeneros.get_model().clear()
-        for genero in self.currentPelicula.generos:
-            self.lstGeneros.get_model().append([genero.nombre])
+        locked = False
+        try:
+            gtk.gdk.threads_enter()
+            locked = True
+            self.txtTitulo.set_text(self.currentPelicula.titulo)
+            self.spbDuracion.set_value(int(self.currentPelicula.duracion))
+            self.btnFechaEstreno.set_label(self.currentPelicula.fechaEstreno)
+            self.txtUrlPelicula.set_text(self.currentPelicula.urlPelicula)
+            self.txtImagenPelicula.set_text(self.currentPelicula.urlImagen)
             
-        self.lstReparto.get_model().clear()
-        for reparto in self.currentPelicula.reparto:
-            self.lstReparto.get_model().append([reparto.papel])
-        
+            self.lstCompanias.get_model().clear()
+            for compania in self.currentPelicula.companias:
+                self.lstCompanias.get_model().append([compania.nombre])
+            
+            self.lstGeneros.get_model().clear()
+            for genero in self.currentPelicula.generos:
+                self.lstGeneros.get_model().append([genero.nombre])
+                
+            self.lstReparto.get_model().clear()
+            gtk.gdk.threads_leave()
+            locked = False
+            client = MovieClient()
+            for reparto in self.currentPelicula.reparto:
+                try:
+                    actor = client.obtenActor(reparto.idActor)
+                    gtk.gdk.threads_enter()
+                    locked = True
+                    self.lstReparto.get_model().append([reparto.papel, actor.nombre])
+                except:
+                    pass
+                finally:
+                    if locked:
+                        gtk.gdk.threads_leave()
+                        locked = False
+        finally:
+            if locked:
+                gtk.gdk.threads_leave()
+            
     def loadCurrentActor(self):
         if self.currentActor is None:
             return
@@ -219,28 +241,28 @@ class GUICinema:
         self.txtImagenActor.set_text(self.currentActor.urlImagen)   
     
     def loadUrlImage(self, component, url, maxWidth):
-        released = True
+        locked = False
         try:
             gtk.gdk.threads_enter()
-            released = False
+            locked = True
             component.set_from_pixbuf(None)
             idMessage = self.pushMessage("Cargando Imagen...")
             gtk.gdk.threads_leave()
-            released = True
+            locked = False
             response = urllib2.urlopen(url)
             loader = gtk.gdk.PixbufLoader()
             loader.write(response.read())
             loader.close()
             gtk.gdk.threads_enter()
-            released = False
+            locked = True
             self.popMessage(idMessage)
             component.set_from_pixbuf(loader.get_pixbuf())
             gtk.gdk.threads_leave()
-            released = True
+            locked = False
         except Exception as error:
             print "guicinema::loadUrlImage::" + str(error)
         finally:
-            if not released:
+            if locked:
                 gtk.gdk.threads_leave()
     def pushMessage(self, message):
         context = self.statusbar.get_context_id("statusbar")

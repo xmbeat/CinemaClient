@@ -98,7 +98,7 @@ class MovieClient:
                 pelicula.reparto = self.obtenRepartoPelicula(idPelicula)
                          
         except Exception as error:
-            print "MovieClient::buscarPelicula::" + str(error)
+            print "MovieClient::obtenPelicula::" + str(error)
         
         return pelicula
     
@@ -133,13 +133,13 @@ class MovieClient:
                 actor.lugar = otroActor.place_of_birth
                 actor.urlActor = otroActor.homepage
                 actor.nombre = otroActor.name
-                if otroActor.profile_path != "":
+                if not otroActor.profile_path is None and otroActor.profile_path != "":
                     actor.urlImagen = self.imagePath + otroActor.profile_path
                 actor.fechaNacimiento = otroActor.birthday
                 actor.fechaMuerte = otroActor.deathday
                 
         except Exception as error:
-            print error
+            print "MovieClient::obtenActor::" + str(error)
             
         return actor
         

@@ -1,37 +1,40 @@
 import httplib
 import json
-from identidad import ActorReducido, Actor, PeliculaReducida, Pelicula, InfoCompania, InfoGenero, InfoReparto
+from identidad import *
 import urllib
+
 
 class GenericObject(object):
     pass
+
 
 def factoryGenericObject(dictionary):
     obj = GenericObject()
     obj.__dict__.update(dictionary)
     return obj
 
-        
+
 class MovieClient:
     def __init__(self):
         self.apiKey = "1f7b1044674d95c01a599c156ce2140f"
         self.host = "api.themoviedb.org"
         self.imagePath = "http://cf2.imgobject.com/t/p/w500"
-        
+
     def getJSON(self, host, resource):
         conn = httplib.HTTPConnection(host, 80)
-        conn.request("GET", resource)       
-        #conn.putheader("Accept:", "application/json")
+        conn.request("GET", resource)
         res = conn.getresponse()
         data = res.read()
         conn.close()
         return data
-    
+
     def obtenPelicula(self, idPelicula):
         pelicula = None
         try:
-            respuesta = self.getJSON(self.host, "/3/movie/" + str(idPelicula) + "?api_key=" + self.apiKey)
-            #mdbPelicula = json.loads(respuesta, object_hook=factoryMDBPelicula)
+            respuesta = self.getJSON(self.host, "/3/movie/" + str(idPelicula) +
+                                     "?api_key=" + self.apiKey)
+
+            # la = json.loads(respuesta, object_hook=factoryMDBPelicula)
             mdbPelicula = json.loads(respuesta, object_hook=factoryGenericObject)
             if not mdbPelicula is None:
                 pelicula = Pelicula()

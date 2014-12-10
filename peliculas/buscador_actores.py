@@ -13,19 +13,19 @@ class BuscadorActores(Thread):
     def run(self):
         #Thread.run(self)
         try:
-            gtk.threads_enter()
+            gtk.gdk.threads_enter()
             idMessage = self.gui.pushMessage("Buscando coincidiencias...")
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
             client = MovieClient()
             
             self.gui.actoresReducidos = client.buscarActor(self.who, 1)
-            gtk.threads_enter()
+            gtk.gdk.threads_enter()
             for actor in self.gui.actoresReducidos:
                 self.gui.cmbResultadosActor.append_text(actor.nombre)
                 
             self.gui.popMessage(idMessage)
             self.gui.btnBuscarActor.set_sensitive(True)
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
         except Exception as error:
             
             print "BuscadorActores::" + str(error)
@@ -46,16 +46,16 @@ class CargadorActor(Thread):
             gtk.threads_leave()
             self.gui.currentActor = client.obtenActor(self.actor.id)
             self.gui.popMessage(idMessage)
-            gtk.threads_enter()
+            gtk.gdk.threads_enter()
             self.gui.loadCurrentActor()
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
             self.gui.loadUrlImage(self.gui.imgActor, self.gui.currentActor.urlImagen, 300)
         except Exception as error:
             print "Error::CargadorActor::" + str(error)
         finally:
-            gtk.threads_enter()
+            gtk.gdk.threads_enter()
             self.gui.frmDetallesActor.set_sensitive(True)
             self.gui.btnSeleccionarActor.set_sensitive(True) 
             self.gui.btnBuscarActor.set_sensitive(True)
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
     

@@ -9,7 +9,7 @@ from buscador_actores import BuscadorActores, CargadorActor
 
 class GUICinema:
     def __init__(self, gladeFile):
-        gtk.threads_init()
+        gtk.gdk.threads_init()
         builder = gtk.Builder()
         builder.add_from_file(gladeFile)     
         self.window = builder.get_object("winMain")
@@ -25,12 +25,35 @@ class GUICinema:
         self.btnActualizarActor = builder.get_object("btnActualizarActor")
         self.btnActualizarActor.connect("clicked", self.onPressedActualizarActor)
         self.cmbResultadosActor = builder.get_object("cmbResultadosActor")
+        
+        self.btnBuscarPelicula = builder.get_object("btnBuscarPelicula")
+        self.btnBuscarPelicula.connect("clicked", self.onPressedBuscarPelicula)
+        self.btnSeleccionarPelicula = builder.get_object("btnSeleccionarPelicula")
+        self.btnSeleccionarPelicula.connect("clicked", self.onPressedSeleccionarPelicula)
+        self.btnFechaEstreno = builder.get_object("btnFechaEstreno")
+        self.btnFechaEstreno.connect("clicked", self.onPressedFechaEstreno)
+        self.btnActualizarPelicula = builder.get_object("btnActualizarPelicula")
+        self.btnActualizarPelicula.connect("clicked", self.onPressedActualizarPelicula)
+        self.cmbResultadosPelicula = builder.get_object("cmbResultadosPelicula")
+    
+        self.txtTitulo = builder.get_object("txtTitulo")
+        self.txtDuracion = builder.get_object("txtDuracion")
+        self.txtUrlPelicula = builder.get_object("txtUrlPelicula")
+        self.txtImagenPelicula = builder.get_object("txtImagenPelicula")
+        
         store = gtk.ListStore(TYPE_STRING)
-        self.cmbResultadosActor.set_model(store)        
+        self.cmbResultadosActor.set_model(store)
         cell = gtk.CellRendererText()
         self.cmbResultadosActor.pack_start(cell)
         self.cmbResultadosActor.add_attribute(cell, "text", 0)
-        self.cmbResultadosActor.set_active(0)
+        
+        
+        store = gtk.ListStore(TYPE_STRING)
+        self.cmbResultadosPelicula.set_model(store)    
+        cell = gtk.CellRendererText()
+        self.cmbResultadosPelicula.pack_start(cell)
+        self.cmbResultadosPelicula.add_attribute(cell, "text", 0)
+        #self.cmbResultadosActor.set_active(0)
         
         self.txtBusquedaActor = builder.get_object("txtBusquedaActor")
         self.txtNombreActor = builder.get_object("txtNombreActor")
@@ -53,7 +76,11 @@ class GUICinema:
         self.actoresReducidos = None
         self.listaActores = None
         
+        self.window.connect("destroy", gtk.mainquit)
         gtk.main()
+    
+    def onPressedActualizarPelicula(self, button):
+        pass
     
     def onPressedSeleccionarActor(self, button):
         if not self.actoresReducidos is None:
@@ -70,6 +97,9 @@ class GUICinema:
                 cargador = CargadorActor(self.actoresReducidos[indice], self)
                 cargador.start()
     
+    def onPressedSeleccionarPelicula(self, button):
+        pass    
+        
     def onPressedBuscarActor(self, button):
         button.set_sensitive(False)
         self.removeAllItems(self.cmbResultadosActor)
@@ -81,7 +111,12 @@ class GUICinema:
         buscador = BuscadorActores(nombre, self)
         buscador.start()
         
-        
+    def onPressedBuscarPelicula(self, button):
+        pass
+    
+    def onPressedFechaEstreno(self, button):
+        pass
+    
     def onPressedNacimientoActor(self, button):
         pass
     
@@ -114,16 +149,16 @@ class GUICinema:
     
     def loadUrlImage(self, component, url, maxWidth):
         try:
-            gtk.threads_enter()
+            gtk.gdk.threads_enter()
             self.imgActor.set_from_pixbuf(None)
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
             response = urllib2.urlopen(url)
             loader = gtk.gdk.PixbufLoader()
             loader.write(response.read())
             loader.close()
-            gtk.threads_enter()
+            gtk.gdk.threads_enter()
             self.imgActor.set_from_pixbuf(loader.get_pixbuf())
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
         except Exception as error:
             print "guicinema::loadUrlImage::" + str(error)
     

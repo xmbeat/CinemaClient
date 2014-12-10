@@ -3,5 +3,4 @@ pep8
 autopep8
 coverage
 lettuce
-gtk
 mock

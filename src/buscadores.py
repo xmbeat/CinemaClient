@@ -37,6 +37,7 @@ class BuscadorActores(Thread):
         finally:
             if locked:
                 gtk.gdk.threads_leave()
+
 class BuscadorPeliculas(Thread):
     def __init__(self, title, gui):
         Thread.__init__(self)

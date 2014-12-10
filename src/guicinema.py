@@ -2,11 +2,11 @@
 
 import urllib2
 import pygtk
-from peliculas.movie_client import MovieClient
+from movie_client import MovieClient
 pygtk.require('2.0')
 import gtk
 from gobject.constants import TYPE_STRING
-from buscador_actores import BuscadorActores, CargadorActor, BuscadorPeliculas, CargadorPelicula
+from buscadores import BuscadorActores, CargadorActor, BuscadorPeliculas, CargadorPelicula
 
 class GUICinema:
     def __init__(self, gladeFile):
@@ -272,8 +272,7 @@ class GUICinema:
         context = self.statusbar.get_context_id("statusbar")
         self.statusbar.remove_message(context, idMessage)
     
-# If the program is run directly or passed as an argument to the python
-# interpreter then create a HelloWorld instance and show it
+
 if __name__ == "__main__":
     gui = GUICinema("interface.glade")
     

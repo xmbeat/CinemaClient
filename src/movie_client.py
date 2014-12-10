@@ -1,14 +1,7 @@
 import httplib
 import json
-from actor import ActorReducido, Actor, PeliculaReducida, Pelicula, InfoCompania, InfoGenero, InfoReparto
+from identidad import ActorReducido, Actor, PeliculaReducida, Pelicula, InfoCompania, InfoGenero, InfoReparto
 import urllib
-
-class Busqueda(object):
-    def __init__(self):
-        self.page = 0
-        self.results = []
-        self.total_pages = 0
-        self.total_results = 0
 
 class GenericObject(object):
     pass
@@ -17,38 +10,6 @@ def factoryGenericObject(dictionary):
     obj = GenericObject()
     obj.__dict__.update(dictionary)
     return obj
-    
-def factoryBusqueda(dictionary):
-    busqueda = Busqueda()
-    busqueda.__dict__.update(dictionary)
-    return busqueda
-
-class MDBActor(object):
-    def __init__(self):
-        self.adult = False
-        self.also_known_as = []
-        self.biography = ""
-        self.birthday = ""
-        self.deathday = ""
-        self.homepage = ""
-        self.id = 0
-        self.name = ""
-        self.place_of_birth = ""
-        self.profile_path = ""
-    pass
-
-def factoryMDBActor(dictionary):
-    actor = MDBActor()
-    actor.__dict__.update(dictionary)
-    return actor
-
-class MDBPelicula(object):
-    pass
-
-def factoryMDBPelicula(dictionary):
-    pelicula = MDBPelicula()
-    pelicula.__dict__.update(dictionary)
-    return pelicula
 
         
 class MovieClient:

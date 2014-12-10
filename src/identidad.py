@@ -1,24 +1,31 @@
 class ActorReducido:
-    def __init__(self, idActor = 0, nombreActor = ""):
+
+    def __init__(self, idActor=0, nombreActor=""):
         self.id = idActor
         self.nombre = nombreActor
 
+
 class Actor:
+
     def __init__(self):
-        self.id = 0;
+        self.id = 0
         self.nombre = ""
         self.urlActor = ""
         self.urlImagen = ""
         self.lugar = ""
         self.fechaNacimiento = None
         self.fechaMuerte = None
-        
+
+
 class PeliculaReducida:
-    def __init__(self, idPelicula = 0, tituloPelicula = ""):
+
+    def __init__(self, idPelicula=0, tituloPelicula=""):
         self.id = idPelicula
         self.titulo = tituloPelicula
 
+
 class Pelicula:
+
     def __init__(self):
         self.id = 0
         self.titulo = ""
@@ -30,17 +37,23 @@ class Pelicula:
         self.generos = []
         self.reparto = []
 
+
 class InfoCompania:
+
     def __init__(self):
         self.id = 0
         self.nombre = ""
+
 
 class InfoGenero:
+
     def __init__(self):
         self.id = 0
         self.nombre = ""
 
+
 class InfoReparto:
+
     def __init__(self):
         self.idActor = 0
         self.papel = ""

@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.path.append("../")
 from src.movie_client import MovieClient, factoryGenericObject
 
 class TestMovieClient(unittest.TestCase):

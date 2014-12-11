@@ -15,5 +15,5 @@ script:
 - python mock_movieclient.py -v
 - cd ..
 - lettuce acceptance_test
-- coverage run --branch movie_client.py
+- coverage run --branch *.py 
 - coverage report -m

@@ -6,7 +6,7 @@ import time
 
 def main():
     xp = Xpresser()
-    xp.load_images('/home/jxsxs/Escritorio/Final-Project-Alex-master/Xpresser/Images')
+    xp.load_images('/Images')
     time.sleep(3)
     xp.click('name-actor')
     xp.type('michael j fox')

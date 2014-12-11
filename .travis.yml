@@ -11,7 +11,9 @@ before_script:
 - cd ..
 script:
 - lettuce acceptance_test
+- ls -la
 - cd unittest
-- python movie_client.py -v
+- python movice_client.py -v
+- python mock_test.py -v
 - coverage run --branch movie_client.py
 - coverage report -m

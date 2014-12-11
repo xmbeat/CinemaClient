@@ -18,5 +18,3 @@ script:
 - coverage report -m
 - cd ..
 - lettuce acceptance_test
-- cd src
-- python guicinema.py

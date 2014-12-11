@@ -10,10 +10,10 @@ before_script:
 - flake8 --max-complexity=10 --exclude=*.txt,*.md,*.pyc,*.glade --max-line-length=200 *
 - cd ..
 script:
-- lettuce acceptance_test
-- ls -la
 - cd unittest
-- python movice_client.py -v
-- python mock_test.py -v
+- python test_movieclient.py -v
+- python mock_movieclient.py -v
+- cd ..
+- lettuce acceptance_test
 - coverage run --branch movie_client.py
 - coverage report -m

@@ -1,8 +1,8 @@
 import unittest
 import mock 
 import sys
-sys.path.append("../")
-from src.movie_client import MovieClient
+sys.path.append("../src")
+from movie_client import MovieClient
 class MockTest(unittest.TestCase):
     
     @mock.patch('src.movie_client.MovieClient')

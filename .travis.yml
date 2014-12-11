@@ -9,7 +9,7 @@ before_script:
 - autopep8 -ir *.py
 - flake8 --max-complexity=10 --exclude=*.txt,*.md,*.pyc,*.glade --max-line-length=200 *
 - cd ..
-- sudo apt-get install libcairo2-dev libgtk2.0-dev libglib2.0-dev libtool libpango1.0-dev python-gtk2
+- sudo apt-get install python-gtk2
 script:
 - cd unittest
 - python test_movieclient.py -v

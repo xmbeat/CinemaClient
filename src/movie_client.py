@@ -23,10 +23,10 @@ class MovieClient:
         self.imagePath = "http://cf2.imgobject.com/t/p/w500"
 
     def updateActor(self, actor):
-        pass
+        return False
 
     def updatePelicula(self, pelicula):
-        pass
+        return False
 
     def getJSON(self, host, resource):
         conn = httplib.HTTPConnection(host, 80)

@@ -3,6 +3,7 @@ import mock
 import sys
 sys.path.append("../src/")
 from movie_client import MovieClient
+from identidad import Actor, Pelicula
 class MockTest(unittest.TestCase):
     
     @mock.patch('movie_client.MovieClient')
@@ -25,6 +26,23 @@ class MockTest(unittest.TestCase):
         actor = cliente.obtenActor(1231)
         self.assertEqual("Juan Hebert", actor.nombre)
         self.assertEqual("1992-11-12", actor.fechaNacimiento)
+    
+    @mock.patch('movie_client.MovieClient.updateActor')
+    def test_updateActor_1(self, mock_update):
+        cliente = MovieClient()
+        mock_update.return_value = True
+        actor = Actor()
+        actor.nombre = "Juan"
+        actor.id = 1
+        self.assertTrue(cliente.updateActor(actor))
         
+    @mock.patch('movie_client.MovieClient.updatePelicula')
+    def test_udpatePelicula_22(self, mock_update):
+        cliente = MovieClient()
+        mock_update.return_value = True
+        pelicula = Pelicula()
+        pelicula.id = 22
+        pelicula.titulo = "Back to the future"
+        self.assertTrue(cliente.updatePelicula(pelicula))
 if __name__ == "__main__":
     unittest.main()

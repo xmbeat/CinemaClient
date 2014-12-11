@@ -13,7 +13,7 @@ script:
 - cd unittest
 - python test_movieclient.py -v
 - python mock_movieclient.py -v
-- coverage run --branch *.py 
+- coverage run --branch test_movieclient.py 
 - coverage report -m
 - cd ..
 - lettuce acceptance_test

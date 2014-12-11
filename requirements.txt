@@ -4,4 +4,3 @@ autopep8
 coverage
 lettuce
 mock
-pygtk
